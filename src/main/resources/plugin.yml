@@ -1,0 +1,12 @@
+name: TauBotPlugin
+version: ${project.version}
+main: com.simdemocracy.minecraft.taubotplugin.taubotplugin.TauBotPlugin
+api-version: 1.13
+authors: [gamingdiamond982]
+website: minecraft.sim-democracy.com
+commands:
+  e:
+    description: Interacts with taubot
+    usage: /e <action> [args]
+    permission: <plugin name>.e
+    permission-message: You don't have valid permissions; this is a problem talk to an admin
