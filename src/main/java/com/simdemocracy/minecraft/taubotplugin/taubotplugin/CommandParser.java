@@ -22,6 +22,7 @@ public class CommandParser implements CommandExecutor {
             return true;
         }
         int balance;
+        //Sloppy ik but it works
         if (args[0].equals("balance") || args[0].equals("bal")){
             try {
                 balance = connection.getUserBalance(sender.getName());
