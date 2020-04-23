@@ -26,6 +26,7 @@ public class ApiConnection {
     public ApiConnection(){
         //Builds connection from config
         //should probably be moved to its own function
+        //TODO: move to its own function
         System.out.println("Building config");
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         try(FileReader fileReader = new FileReader("config.json")) {
@@ -64,7 +65,6 @@ public class ApiConnection {
                 return line;
             }
         } catch(Exception e) {
-            
             throw new ApiException("Failed to connect");
         }
         throw new ApiException("wtf have you done you magical cow");
@@ -74,6 +74,7 @@ public class ApiConnection {
         //simple balance getter
         String balance = Get("http://"+ this.ip +"/Minecraft/account/" + ign + "/balance");
         String[] content = balance.split(" ");
+        //TODO: idk make this better
         if (content.length > 1) {
             //sloppy code I know but it works
             throw new ApiException("Failed with error code: " + content[0]);
