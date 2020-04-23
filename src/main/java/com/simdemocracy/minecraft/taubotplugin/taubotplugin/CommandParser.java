@@ -7,13 +7,13 @@ import org.bukkit.entity.Player;
 
 
 public class CommandParser implements CommandExecutor {
+    //builds connection object
     ApiConnection connection = new ApiConnection();
-
+    
     public CommandParser() {
         System.out.println("Constructing a TauBot CommandParser");
 
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         System.out.println("Running command " + command.getName());
