@@ -7,9 +7,11 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
-//exception
+import java.util.HashMap;
+
 class ApiException extends Exception {
     public ApiException(String errorMessage) {
         super(errorMessage);
@@ -24,9 +26,6 @@ public class ApiConnection {
     String ip;
 
     public ApiConnection(){
-        //Builds connection from config
-        //should probably be moved to its own function
-        //TODO: move to its own function
         System.out.println("Building config");
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         try(FileReader fileReader = new FileReader("config.json")) {
@@ -49,7 +48,7 @@ public class ApiConnection {
 
 
     private String Get(String toUrl) throws ApiException {
-        //Simple connection to taubot api
+
         try {
             URL url = new URL (toUrl);
             String encoding = Base64.getEncoder().encodeToString((this.uname + ":" + this.psswd).getBytes("utf-8"));
@@ -65,21 +64,44 @@ public class ApiConnection {
                 return line;
             }
         } catch(Exception e) {
+            //e.printStackTrace();
             throw new ApiException("Failed to connect");
         }
         throw new ApiException("wtf have you done you magical cow");
+    }
+
+    private void Post(String toUrl) throws ApiException {
+        try {
+            URL url = new URL (toUrl);
+            String encoding = Base64.getEncoder().encodeToString((this.uname + ":" + this.psswd).getBytes("utf-8"));
+
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setRequestProperty  ("Authorization", "Basic " + encoding);
+            InputStream content = (InputStream)connection.getInputStream();
+            BufferedReader in   = new BufferedReader (new InputStreamReader (content));
+            String line;
+
+        } catch(Exception e) {
+            //e.printStackTrace();
+            throw new ApiException("Failed to connect");
+        }
+
 
     }
+
     public int getUserBalance(String ign) throws ApiException {
-        //simple balance getter
         String balance = Get("http://"+ this.ip +"/Minecraft/account/" + ign + "/balance");
         String[] content = balance.split(" ");
-        //TODO: idk make this better
         if (content.length > 1) {
-            //sloppy code I know but it works
             throw new ApiException("Failed with error code: " + content[0]);
         }
         return Integer.parseInt(balance);
+    }
+
+    public void transfer(String fromIgn, String toIgn, int amount) throws ApiException{
+        Post("http://" + this.ip + "/Minecraft/account/" + fromIgn + "/transfer?beneficiary=" + toIgn + "&amount=" + amount);
     }
 
 }
